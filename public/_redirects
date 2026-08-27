@@ -1,0 +1,18 @@
+# Static files explicitly allowed
+/manifest.json              /manifest.json              200
+/sw.js                      /sw.js                      200
+/launchericon-48x48.png     /launchericon-48x48.png     200
+/launchericon-72x72.png     /launchericon-72x72.png     200
+/launchericon-96x96.png     /launchericon-96x96.png     200
+/launchericon-144x144.png   /launchericon-144x144.png   200
+/launchericon-192x192.png   /launchericon-192x192.png   200
+/launchericon-512x512.png   /launchericon-512x512.png   200
+/icon-192.png               /icon-192.png               200
+/icon-512.png               /icon-512.png               200
+/maskable-icon-512.png      /maskable-icon-512.png      200
+/screenshot-mobile.png      /screenshot-mobile.png      200
+/screenshot-desktop.png     /screenshot-desktop.png     200
+/icon.svg                   /icon.svg                   200
+
+# SPA Fallback
+/*                          /index.html                 200

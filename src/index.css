@@ -1,0 +1,181 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: var(--md-sys-color-surface, #111412);
+  --color-surface-dim: var(--md-sys-color-surface-dim, #0d0f0e);
+  --color-surface-bright: var(--md-sys-color-surface-bright, #1a1d1b);
+  --color-surface-container: var(--md-sys-color-surface-container, #1d211e);
+  --color-surface-container-low: var(--md-sys-color-surface-container-low, #191c1a);
+  --color-surface-container-high: var(--md-sys-color-surface-container-high, #282b28);
+  --color-surface-container-highest: var(--md-sys-color-surface-container-highest, #333633);
+  --color-on-surface: var(--md-sys-color-on-surface, #e1e3df);
+  --color-on-surface-variant: var(--md-sys-color-on-surface-variant, #c0c9c1);
+  --color-primary: var(--md-sys-color-primary, #2d6a4f);
+  --color-on-primary: var(--md-sys-color-on-primary, #ffffff);
+  --color-primary-container: var(--md-sys-color-primary-container, #d8f3dc);
+  --color-on-primary-container: var(--md-sys-color-on-primary-container, #081c15);
+  --color-outline: var(--md-sys-color-outline, #8a938c);
+  --color-outline-variant: var(--md-sys-color-outline-variant, rgba(255, 255, 255, 0.08));
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+@layer base {
+  :root {
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--md-sys-color-surface, #111412);
+    color: var(--md-sys-color-on-surface, #e1e3df);
+    min-height: 100vh;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: contain;
+    touch-action: manipulation;
+  }
+
+  /* Android Safe Area insets */
+  .safe-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .safe-nav-bottom {
+    padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .safe-main-bottom {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  .font-mono, .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Material You Elevation Surfaces */
+.surface-card {
+  background-color: var(--md-sys-color-surface-container, #1d211e);
+  color: var(--md-sys-color-on-surface, #e1e3df);
+  border: 1px solid var(--md-sys-color-outline-variant, rgba(255, 255, 255, 0.08));
+  border-radius: 1.5rem; /* 24px Material 3 standard */
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.surface-card-high {
+  background-color: var(--md-sys-color-surface-container-high, #282b28);
+  color: var(--md-sys-color-on-surface, #e1e3df);
+  border: 1px solid var(--md-sys-color-outline-variant, rgba(255, 255, 255, 0.08));
+  border-radius: 1.5rem;
+}
+
+.surface-card-highest {
+  background-color: var(--md-sys-color-surface-container-highest, #333633);
+  color: var(--md-sys-color-on-surface, #e1e3df);
+  border-radius: 1.5rem;
+}
+
+.surface-card-low {
+  background-color: var(--md-sys-color-surface-container-low, #191c1a);
+  color: var(--md-sys-color-on-surface, #e1e3df);
+  border-radius: 1.25rem;
+}
+
+/* Material You Pill button & active chips */
+.m3-pill {
+  border-radius: 9999px;
+  transition: all 0.18s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.m3-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.m3-ripple::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: currentColor;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.m3-ripple:hover::after {
+  opacity: 0.08;
+}
+
+.m3-ripple:active::after {
+  opacity: 0.16;
+}
+
+/* Custom Scrollbars in Material 3 Style */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--md-sys-color-outline-variant, #404943);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--md-sys-color-outline, #8a938c);
+}
+
+/* Hide scrollbars for clean mobile touch strips */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* ==========================================================================
+   Android Low Power Mode (Battery Saver & GPU Throttle)
+   ========================================================================== */
+.low-power-mode *,
+.low-power-mode *::before,
+.low-power-mode *::after {
+  animation-duration: 0.001s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001s !important;
+  scroll-behavior: auto !important;
+}
+
+.low-power-mode .backdrop-blur-md,
+.low-power-mode .backdrop-blur-lg,
+.low-power-mode .backdrop-blur-xl,
+.low-power-mode .backdrop-blur-xs,
+.low-power-mode .backdrop-blur-sm {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background-color: var(--md-sys-color-surface-container-high, #282b28) !important;
+}
+
+.low-power-mode canvas {
+  image-rendering: pixelated;
+}

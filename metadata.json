@@ -1,0 +1,8 @@
+{
+  "name": "Remix Meridian Personal Systems",
+  "description": "100% offline standalone Android APK personal operating system featuring native Capacitor architecture, Material 3 Monet theming, hardware haptics, gesture back navigation, and zero-network local persistence.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
