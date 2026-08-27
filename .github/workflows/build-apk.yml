@@ -1,9 +1,12 @@
-name: Build Android APK
+name: Build and Release Android APK
 
 on:
   push:
     branches: [ main, master ]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build-apk:
@@ -33,6 +36,9 @@ jobs:
       - name: Install npm dependencies
         run: npm install --no-audit --no-fund
 
+      - name: Generate App Icons
+        run: node scripts/generate-icons.mjs
+
       - name: Build Web Assets
         run: npm run build
 
@@ -45,9 +51,33 @@ jobs:
           gradle wrapper --gradle-version 8.13
           ./gradlew assembleDebug --stacktrace --no-daemon
 
-      - name: Upload APK as Artifact
+      - name: Prepare APK Files
+        run: |
+          mkdir -p release-apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk release-apk/Meridian-v1.0.0-b${{ github.run_number }}.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk release-apk/Meridian-latest.apk
+
+      - name: Upload APK as Workflow Artifact
         uses: actions/upload-artifact@v4
         with:
           name: meridian-android-app
-          path: android/app/build/outputs/apk/debug/*.apk
+          path: release-apk/*.apk
           retention-days: 30
+
+      - name: Publish to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.0-build.${{ github.run_number }}
+          name: Meridian App Release (Build #${{ github.run_number }})
+          body: |
+            ### 📱 Meridian Android Application
+            - **Build Number**: #${{ github.run_number }}
+            - **Commit**: `${{ github.sha }}`
+            
+            #### 📥 Download APK:
+            Download **`Meridian-latest.apk`** below to install directly on your Android device.
+          draft: false
+          prerelease: false
+          files: release-apk/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

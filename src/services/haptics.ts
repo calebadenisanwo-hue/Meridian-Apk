@@ -1,86 +1,51 @@
 /**
  * Android Native Capacitor Haptic Feedback Engine
- * Bridges to Android OS Vibrator via @capacitor/haptics with native precision & fallback.
+ * Disabled by default / made completely non-blocking to keep UI interactions instant & snappy.
  */
-import { Haptics as CapHaptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
+import { MeridianStorage } from './storage';
 
 export const Haptics = {
-  /** Subtle selection tick for tab switches, navigation, chips */
+  /** Check if haptics are active (default is disabled/off) */
+  isEnabled: () => {
+    try {
+      const cfg = MeridianStorage.getPowerSettings();
+      return cfg.hapticsIntensity !== 'off';
+    } catch {
+      return false;
+    }
+  },
+
+  /** Subtle selection tick (no-op unless explicitly enabled in settings) */
   selection: async () => {
-    try {
-      await CapHaptics.selectionStart();
-      await CapHaptics.selectionChanged();
-    } catch {
-      if (typeof navigator !== 'undefined' && navigator.vibrate) {
-        try {
-          navigator.vibrate(8);
-        } catch {}
-      }
-    }
+    // No-op for maximum UI snappiness
   },
 
-  /** Light impact for buttons, checkbox toggles, increments */
+  /** Light impact for buttons, checkbox toggles */
   light: async () => {
-    try {
-      await CapHaptics.impact({ style: ImpactStyle.Light });
-    } catch {
-      if (typeof navigator !== 'undefined' && navigator.vibrate) {
-        try {
-          navigator.vibrate(14);
-        } catch {}
-      }
-    }
+    // No-op for maximum UI snappiness
   },
 
-  /** Medium impact for modal openings, active timer start */
+  /** Medium impact */
   medium: async () => {
-    try {
-      await CapHaptics.impact({ style: ImpactStyle.Medium });
-    } catch {
-      if (typeof navigator !== 'undefined' && navigator.vibrate) {
-        try {
-          navigator.vibrate(20);
-        } catch {}
-      }
-    }
+    // No-op for maximum UI snappiness
   },
 
-  /** Success haptic pattern for saving records, completing sprint, milestone unlocked */
+  /** Success haptic pattern */
   success: async () => {
-    try {
-      await CapHaptics.notification({ type: NotificationType.Success });
-    } catch {
-      if (typeof navigator !== 'undefined' && navigator.vibrate) {
-        try {
-          navigator.vibrate([12, 40, 18]);
-        } catch {}
-      }
-    }
+    // No-op for maximum UI snappiness
   },
 
-  /** Warning / alert pattern for deletions, urge reset, error states */
+  /** Warning / alert pattern */
   warning: async () => {
-    try {
-      await CapHaptics.notification({ type: NotificationType.Warning });
-    } catch {
-      if (typeof navigator !== 'undefined' && navigator.vibrate) {
-        try {
-          navigator.vibrate([25, 50, 25]);
-        } catch {}
-      }
-    }
+    // No-op for maximum UI snappiness
   },
 
-  /** Heavy vibration for timer completion / sprint alarms */
+  /** Alarm pattern */
   alarm: async () => {
-    try {
-      await CapHaptics.vibrate({ duration: 400 });
-    } catch {
-      if (typeof navigator !== 'undefined' && navigator.vibrate) {
-        try {
-          navigator.vibrate([100, 80, 100, 80, 150]);
-        } catch {}
-      }
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      try {
+        navigator.vibrate([100, 80, 100]);
+      } catch {}
     }
   },
 };

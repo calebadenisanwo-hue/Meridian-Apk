@@ -546,7 +546,7 @@ export class MeridianStorage {
       lowPowerMode: false,
       disableAnimations: false,
       reduceSamplingRate: false,
-      hapticsIntensity: 'standard',
+      hapticsIntensity: 'off',
     });
   }
 
