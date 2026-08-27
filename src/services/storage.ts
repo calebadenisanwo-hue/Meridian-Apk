@@ -144,6 +144,8 @@ export function getDefaultFinanceState(): FinanceState {
     accounts: [
       { id: 'bank-main', name: 'Primary Bank Account', kind: 'bank', accent: '#22A566', opening: 0, openingDate: todayStr() },
       { id: 'cash-wallet', name: 'Cash Wallet', kind: 'cash', accent: '#C9963A', opening: 0, openingDate: todayStr() },
+      { id: 'savings-vault', name: 'Savings Vault', kind: 'savings', accent: '#4FA9E0', opening: 0, openingDate: todayStr() },
+      { id: 'investment-portfolio', name: 'Investments & Portfolio', kind: 'investment', accent: '#C77DFF', opening: 0, openingDate: todayStr() },
     ],
     categories: [
       { id: 'exp-food', name: 'Food & Groceries', kind: 'expense', color: '#4FA9E0' },
@@ -154,6 +156,7 @@ export function getDefaultFinanceState(): FinanceState {
       { id: 'exp-other', name: 'Miscellaneous', kind: 'expense', color: '#8E9A93' },
       { id: 'inc-salary', name: 'Allowance / Salary', kind: 'income', color: '#7CC576' },
       { id: 'inc-hustle', name: 'Side Project / Consulting', kind: 'income', color: '#4FA9E0' },
+      { id: 'inc-invest', name: 'Dividends & Returns', kind: 'income', color: '#C77DFF' },
     ],
     transactions: [],
     budgets: {},
@@ -251,6 +254,43 @@ export class MeridianStorage {
       writeJSON(KEYS.finance, def);
       return def;
     }
+
+    // Ensure accounts array exists and has savings and investment
+    if (!Array.isArray(state.accounts)) {
+      state.accounts = getDefaultFinanceState().accounts;
+      writeJSON(KEYS.finance, state);
+      return state;
+    }
+
+    let modified = false;
+    if (!state.accounts.some(a => a.id === 'savings-vault' || a.kind === 'savings')) {
+      state.accounts.push({
+        id: 'savings-vault',
+        name: 'Savings Vault',
+        kind: 'savings',
+        accent: '#4FA9E0',
+        opening: 0,
+        openingDate: todayStr(),
+      });
+      modified = true;
+    }
+
+    if (!state.accounts.some(a => a.id === 'investment-portfolio' || a.kind === 'investment')) {
+      state.accounts.push({
+        id: 'investment-portfolio',
+        name: 'Investments & Portfolio',
+        kind: 'investment',
+        accent: '#C77DFF',
+        opening: 0,
+        openingDate: todayStr(),
+      });
+      modified = true;
+    }
+
+    if (modified) {
+      writeJSON(KEYS.finance, state);
+    }
+
     return state;
   }
 

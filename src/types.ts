@@ -225,7 +225,7 @@ export interface RecoveryState {
 export interface FinanceAccount {
   id: string;
   name: string;
-  kind: 'bank' | 'cash';
+  kind: 'bank' | 'cash' | 'savings' | 'investment';
   accent: string;
   opening: number; // in kobo
   openingDate: string;

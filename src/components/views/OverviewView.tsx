@@ -100,6 +100,20 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
     setIsWeightModalOpen(false);
   };
 
+  const totalFinanceNetWorthKobo = finance.accounts.reduce((sum, acc) => {
+    let b = acc.opening;
+    (finance.transactions || []).forEach(t => {
+      if (t.type === 'income' && t.accountId === acc.id) b += t.amountKobo;
+      else if (t.type === 'expense' && t.accountId === acc.id) b -= t.amountKobo;
+      else if (t.type === 'adjustment' && t.accountId === acc.id) b += t.amountKobo;
+      else if (t.type === 'transfer') {
+        if (t.fromAccountId === acc.id) b -= t.amountKobo;
+        if (t.toAccountId === acc.id) b += t.amountKobo;
+      }
+    });
+    return sum + b;
+  }, 0);
+
   // Systems Roster
   const systems = [
     {
@@ -129,7 +143,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
     {
       route: 'finance' as ModuleRoute,
       title: 'Finance Ledger',
-      desc: `Net worth ${fmtNaira(finance.accounts.reduce((s, a) => s + a.opening, 0))}`,
+      desc: `${finance.accounts.length} accounts · Net worth ${fmtNaira(totalFinanceNetWorthKobo)}`,
       icon: Wallet,
       color: '#4FA9E0',
       score: scores.financeScore,
